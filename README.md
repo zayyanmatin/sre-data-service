@@ -8,13 +8,16 @@ A REST Api is provided to query the data.
 3) Once your DSN is ready, set it to the SRE_DSN environment variable e.g:
 export SRE_DSN=your_dsn
 
+## Running Unit Tests
+From root directory run go test ./... -v
+
 ## Ingest Data
 To ingest data into the database, run main.go from data-ingest/cmd
 
 ## API
-To start the API server, run main.go from api/cmd. API will be available on port 1323.
+To start the API server, run main.go from api/cmd. API will be available on port 1323
 
-API specification is available within the repository.
+API specification is available within the repository
 
 ## Enhancements to be made
 Add validation on startTime and endTime with 400 bad requests 
