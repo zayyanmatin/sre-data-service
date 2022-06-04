@@ -15,7 +15,7 @@ func TestIngestion(t *testing.T) {
 	}
 	// creating server instance with mock db
 	server := Server{
-		db: db,
+		Db: db,
 	}
 	// sql statements prepared and executed every minute for 5 minutes per ingestion
 	for i := 0; i < 6; i++ {

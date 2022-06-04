@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/zayyanmatin/sre-data-service/data-ingest/internal"
+	"github.com/zayyanmatin/sre-data-service/pkg/sqlserver"
 )
 
 func init() {
@@ -14,10 +15,10 @@ func init() {
 }
 
 func main() {
-	//starting db server
-	server, err := internal.Start()
-	if err != nil {
-		log.Fatal(err)
+	//fetching db
+	db := sqlserver.FetchDb()
+	server := internal.Server{
+		Db: db,
 	}
 	//starting ingestion
 	if err := server.IngestData(); err != nil {

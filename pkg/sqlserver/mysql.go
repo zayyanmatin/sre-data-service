@@ -3,12 +3,30 @@ package sqlserver
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func OpenDb() (*sql.DB, error) {
+var (
+	db *sql.DB
+)
+
+func init() {
+	var err error
+	db, err = openDb()
+	if err != nil {
+		log.Fatal(err)
+	}
+	setupDb(db)
+}
+
+func FetchDb() *sql.DB {
+	return db
+}
+
+func openDb() (*sql.DB, error) {
 	db, err := sql.Open("mysql", os.Getenv("SRE_DSN"))
 	if err != nil {
 		return nil, fmt.Errorf("could not open mysql: %w", err)
@@ -16,7 +34,7 @@ func OpenDb() (*sql.DB, error) {
 	return db, nil
 }
 
-func SetupDb(db *sql.DB) error {
+func setupDb(db *sql.DB) error {
 	err := db.Ping()
 	if err != nil {
 		return fmt.Errorf("could not ping mysql: %w", err)

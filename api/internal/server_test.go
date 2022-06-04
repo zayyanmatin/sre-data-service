@@ -49,19 +49,19 @@ func TestAPI(t *testing.T) {
 		{
 			caseName: "timeseries request",
 			url:      "/timeseries",
-			query:    requestQuery{"12321", "12321"},
+			query:    requestQuery{"1654344902", "1664100381"},
 			expected: response{http.StatusOK},
 		},
 		{
 			caseName: "cpu statistic request",
 			url:      "/statistic/cpu",
-			query:    requestQuery{"12321", "12321"},
+			query:    requestQuery{"1654344902", "1664100381"},
 			expected: response{http.StatusOK},
 		},
 		{
 			caseName: "concurrency statistic request",
 			url:      "/statistic/concurrency",
-			query:    requestQuery{"12321", "12321"},
+			query:    requestQuery{"1654344902", "1664100381"},
 			expected: response{http.StatusOK},
 		},
 	}
@@ -78,7 +78,7 @@ func TestAPI(t *testing.T) {
 				mock.ExpectPrepare("select . from").ExpectQuery().
 					WithArgs(v.query.startTime, v.query.endTime).
 					WillReturnRows(sqlmock.NewRows(columns).
-						AddRow(1134, 2.33, 54352))
+						AddRow(1654344902, 2.33, 54352))
 			case strings.Contains(v.url, cpu):
 				mock.ExpectPrepare("select AVG").ExpectQuery().
 					WithArgs(v.query.startTime, v.query.endTime).
@@ -88,7 +88,7 @@ func TestAPI(t *testing.T) {
 				mock.ExpectPrepare("select AVG").ExpectQuery().
 					WithArgs(v.query.startTime, v.query.endTime).
 					WillReturnRows(sqlmock.NewRows(columns).
-						AddRow(76423, 32432, 12343))
+						AddRow(26423.5, 32432, 12343))
 			}
 			// creating request
 			r := httptest.NewRequest(http.MethodGet, v.url, nil)

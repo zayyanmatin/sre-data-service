@@ -7,12 +7,10 @@ import (
 	"time"
 
 	"github.com/zayyanmatin/sre-data-service/models"
-
-	"github.com/zayyanmatin/sre-data-service/pkg/sqlserver"
 )
 
 type Server struct {
-	db *sql.DB
+	Db *sql.DB
 }
 
 func (s *Server) IngestData() error {
@@ -39,7 +37,7 @@ func (s *Server) IngestData() error {
 
 func (s *Server) Insert(datum models.Timeseries) error {
 	// preparing sql execution statement
-	stmt, err := s.db.Prepare("insert into sre.timeseries set ts=?, cpu=?, concurrency=?")
+	stmt, err := s.Db.Prepare("insert into sre.timeseries set ts=?, cpu=?, concurrency=?")
 	if err != nil {
 		return fmt.Errorf("could not prepare insert statement: %w", err)
 	}
@@ -51,13 +49,4 @@ func (s *Server) Insert(datum models.Timeseries) error {
 	}
 
 	return nil
-}
-
-func Start() (*Server, error) {
-	// connecting to mysql db
-	db, err := sqlserver.OpenDb()
-	if err != nil {
-		return nil, fmt.Errorf("could not open mysql db: %w", err)
-	}
-	return &Server{db}, nil
 }

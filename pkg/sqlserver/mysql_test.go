@@ -18,7 +18,7 @@ func TestSetup(t *testing.T) {
 	mock.ExpectExec("CREATE DATABASE").WillReturnResult(driver.ResultNoRows)
 	mock.ExpectExec("CREATE TABLE").WillReturnResult(driver.ResultNoRows)
 	//testing setup
-	err = SetupDb(db)
+	err = setupDb(db)
 	if err != nil {
 		t.Error(err)
 	}

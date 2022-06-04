@@ -12,7 +12,7 @@ import (
 
 type Server struct {
 	Api *echo.Echo
-	db  *sql.DB
+	Db  *sql.DB
 }
 
 const (
@@ -33,7 +33,7 @@ func Start(db *sql.DB) (*Server, error) {
 	e.GET("/statistic/concurrency", server.getConcurrency)
 
 	server.Api = e
-	server.db = db
+	server.Db = db
 
 	return &server, nil
 
@@ -46,7 +46,7 @@ func (w *Server) Close() error {
 	}
 
 	// closing db instance
-	if err := w.db.Close(); err != nil {
+	if err := w.Db.Close(); err != nil {
 		return fmt.Errorf("unable to close db: %w", err)
 	}
 	return nil
@@ -75,7 +75,7 @@ func (w *Server) getConcurrency(ctx echo.Context) error {
 
 func (w *Server) queryTimeSeries(ctx echo.Context, start, end string) error {
 	//preparing sql statement before arguments are populated
-	stmt, err := w.db.Prepare("select *  from sre.timeseries where  ?<=ts and ts<=?")
+	stmt, err := w.Db.Prepare("select *  from sre.timeseries where  ?<=ts and ts<=?")
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, models.Message{Error: fmt.Errorf("could not prepare statement: %w", err).Error()})
 	}
@@ -100,7 +100,7 @@ func (w *Server) queryTimeSeries(ctx echo.Context, start, end string) error {
 }
 func (w *Server) queryStatistic(ctx echo.Context, variable, start, end string) error {
 	//preparing sql statement before arguments are populated
-	stmt, err := w.db.Prepare(fmt.Sprintf(`select AVG(%s), MAX(%s), MIN(%s) from sre.timeseries where  ?<=ts and ts<=?`, variable, variable, variable))
+	stmt, err := w.Db.Prepare(fmt.Sprintf(`select AVG(%s), MAX(%s), MIN(%s) from sre.timeseries where  ?<=ts and ts<=?`, variable, variable, variable))
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, models.Message{Error: fmt.Errorf("could not prepare statement: %w", err).Error()})
 	}
@@ -127,6 +127,5 @@ func (w *Server) queryStatistic(ctx echo.Context, variable, start, end string) e
 		}
 		all = append(all, statistic)
 	}
-	fmt.Println("all", all)
 	return ctx.JSON(http.StatusOK, all)
 }
