@@ -9,7 +9,7 @@ A REST Api is provided to query the data.
 export SRE_DSN=your_dsn
 
 ## Ingest Data
-To run the script to ingest data into the database, run main.go from data-ingest/cmd
+To ingest data into the database, run main.go from data-ingest/cmd
 
 ## API
 To start the API server, run main.go from api/cmd. API will be available on port 1323.
