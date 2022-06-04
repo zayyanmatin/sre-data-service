@@ -13,6 +13,7 @@ To ingest data into the database, run main.go from data-ingest/cmd
 
 ## API
 To start the API server, run main.go from api/cmd. API will be available on port 1323.
+
 API specification is available within the repository.
 
 ## Enhancements to be made
