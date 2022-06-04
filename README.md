@@ -21,7 +21,7 @@ Add validation on startTime and endTime with 400 bad requests
 
 convert startTime and endTime  into time variables
 
-Make updates to description in API spec
+Make updates and corrections to API spec
 
 ## Tech debt
 Add script to start sql server before running main.go file
