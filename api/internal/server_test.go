@@ -84,7 +84,7 @@ func TestAPI(t *testing.T) {
 					WithArgs(v.query.startTime, v.query.endTime).
 					WillReturnRows(sqlmock.NewRows(columns).
 						AddRow(54.43, 94.3, 12.3))
-			case strings.Contains(v.url, "concurrency"):
+			case strings.Contains(v.url, concurrency):
 				mock.ExpectPrepare("select AVG").ExpectQuery().
 					WithArgs(v.query.startTime, v.query.endTime).
 					WillReturnRows(sqlmock.NewRows(columns).

@@ -26,13 +26,11 @@ func (s *Server) IngestData() error {
 			Cpu:         rand.Float32() * 100,
 			Concurrency: uint32(rand.Intn(500000)),
 		}
-		fmt.Println(ts)
 		// inserting data into timeseries database
 		err := s.Insert(ts)
 		if err != nil {
 			return fmt.Errorf("could not insert datum: %w", err)
 		}
-		fmt.Println(before.Unix())
 		// incrementing to next instance of timeseries
 		before = before.Add(60 * time.Second)
 	}
