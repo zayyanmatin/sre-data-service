@@ -21,5 +21,6 @@ updates to description in API spec
 
 ## Tech debt
 add script to start sql server before running main.go file
+
 add optional flag to clean up and drop database
 add configs file to manage environment variables properly
