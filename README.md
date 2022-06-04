@@ -16,11 +16,14 @@ To start the API server, run main.go from api/cmd. API will be available on port
 
 ## Enhancements to be made
 validation on startTime and endTime with 400 bad requests 
+
 make startTime and endTime time variables instead of integers
+
 updates to description in API spec
 
 ## Tech debt
 add script to start sql server before running main.go file
 
 add optional flag to clean up and drop database
+
 add configs file to manage environment variables properly
