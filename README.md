@@ -8,7 +8,7 @@ Prerequisites and Setup:
 3) Once a DSN is ready, set it to the SRE_DSN environment variable e.g:
 export SRE_DSN=your_dsn
 
-Ingest Data: /n
+Ingest Data: \n
 To run the script to ingest data into the database, run main.go from data-ingest/cmd
 
 API:
