@@ -5,7 +5,7 @@ A REST Api is provided to query the data.
 ## Prerequisites and Setup
 1) Have MySQL installed and start up on a server.
 2) Create a DataSourceName (DSN) for the database, making sure the user has privileges to insert and query data into a database called 'sre'.
-3) Once a DSN is ready, set it to the SRE_DSN environment variable e.g:
+3) Once your DSN is ready, set it to the SRE_DSN environment variable e.g:
 export SRE_DSN=your_dsn
 
 ## Ingest Data
