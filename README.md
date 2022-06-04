@@ -1,6 +1,6 @@
 # sre-data-service
-A Service run in Go that will ingest mock cpu and concurrency data into mysql,
-providing a Restful API that can query the data.
+A Service run in Go that will ingest mock cpu and concurrency data into mysql.
+A REST Api is provided to query the data.
 
 Prerequisites and Setup:
 1) Have MySQL installed and start up on a server.
