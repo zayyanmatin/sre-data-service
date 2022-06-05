@@ -29,7 +29,7 @@ func FetchDb() *sql.DB {
 }
 
 func openDb() (*sql.DB, error) {
-	db, err := sql.Open("mysql", os.Getenv("SRE_DSN"))
+	db, err := sql.Open("mysql", os.Getenv("SRE_DSN")+"?parseTime=true")
 	if err != nil {
 		return nil, fmt.Errorf("(please ensure DSN is correct and exported) could not open mysql: %w", err)
 	}
