@@ -33,6 +33,8 @@ Add script to start sql server before running main.go file
 
 Update API Unit test to check response body
 
+Increase test coverage - by checking unhappy paths
+
 Add optional flag to clean up and drop database
 
 Add configs file to manage environment variables properly
