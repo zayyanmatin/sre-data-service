@@ -24,14 +24,14 @@ Add validation on startTime and endTime with 400 bad requests
 
 Add logging to both ingestion and api 
 
-Convert startTime and endTime  into time variables
+Make updates and corrections to API spec
 
 ## Tech debt
-Add script to start sql server before running main.go file
+Add script to start sql server and securely pass DSN before running main.go file
 
 Update API Unit test to check response body
 
-Increase test coverage - by checking unhappy paths
+Increase test coverage - check unhappy paths
 
 Add optional flag to clean up and drop database
 
