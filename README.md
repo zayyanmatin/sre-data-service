@@ -31,7 +31,7 @@ Make updates and corrections to API spec
 
 ## Tech debt
 
-Update API Unit test to check response body
+Update API Unit test to validate body of response
 
 Increase test coverage - check unhappy paths
 
