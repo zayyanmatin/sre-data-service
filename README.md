@@ -22,7 +22,9 @@ From root directory run go test ./... -v
 ## Enhancements to be made
 Add validation on startTime and endTime with 400 bad requests 
 
-convert startTime and endTime  into time variables
+Add logging to both ingestion and api 
+
+Convert startTime and endTime  into time variables
 
 Make updates and corrections to API spec
 
