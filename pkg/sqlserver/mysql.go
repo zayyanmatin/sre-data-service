@@ -45,7 +45,7 @@ func setupDb(db *sql.DB) error {
 	if err != nil {
 		return fmt.Errorf("could not execute query for database creation: %w", err)
 	}
-	_, err = db.Exec("CREATE TABLE IF NOT EXISTS sre.timeseries (ts integer, cpu float, concurrency integer);")
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS sre.timeseriesv2 (ts datetime, cpu float, concurrency integer);")
 	if err != nil {
 		return fmt.Errorf("could not execute query for table creation: %w", err)
 	}

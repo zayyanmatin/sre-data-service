@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo"
 
@@ -19,6 +20,7 @@ const (
 	cpu         = "cpu"
 	ts          = "timeseries"
 	concurrency = "concurrency"
+	dateFormat  = "2006-01-02T15:04"
 )
 
 func Setup(db *sql.DB) (*Server, error) {
@@ -54,33 +56,58 @@ func (w *Server) Close() error {
 
 func (w *Server) getTimeseries(ctx echo.Context) error {
 	//retrieving query parameters
-	startTime := ctx.QueryParam("startTime")
-	endTime := ctx.QueryParam("endTime")
+	startString := ctx.QueryParam("startTime")
+	endString := ctx.QueryParam("endTime")
+	startTime, err := time.Parse(dateFormat, startString)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, models.Message{Error: fmt.Errorf("could not parse start time: %w", err).Error()})
+	}
+	endTime, err := time.Parse(dateFormat, endString)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, models.Message{Error: fmt.Errorf("could not parse end time: %w", err).Error()})
+	}
 	return w.queryTimeSeries(ctx, startTime, endTime)
 }
 
 func (w *Server) getCpu(ctx echo.Context) error {
 	//retrieving query parameters
-	startTime := ctx.QueryParam("startTime")
-	endTime := ctx.QueryParam("endTime")
+	startString := ctx.QueryParam("startTime")
+	endString := ctx.QueryParam("endTime")
+	startTime, err := time.Parse(dateFormat, startString)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, models.Message{Error: fmt.Errorf("could not parse start time: %w", err).Error()})
+	}
+	endTime, err := time.Parse(dateFormat, endString)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, models.Message{Error: fmt.Errorf("could not parse end time: %w", err).Error()})
+	}
 	return w.queryStatistic(ctx, cpu, startTime, endTime)
 }
 
 func (w *Server) getConcurrency(ctx echo.Context) error {
 	//retrieving query parameters
-	startTime := ctx.QueryParam("startTime")
-	endTime := ctx.QueryParam("endTime")
+	startString := ctx.QueryParam("startTime")
+	endString := ctx.QueryParam("endTime")
+	startTime, err := time.Parse(dateFormat, startString)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, models.Message{Error: fmt.Errorf("could not parse start time: %w", err).Error()})
+	}
+	endTime, err := time.Parse(dateFormat, endString)
+	if err != nil {
+		return ctx.JSON(http.StatusBadRequest, models.Message{Error: fmt.Errorf("could not parse end time: %w", err).Error()})
+	}
 	return w.queryStatistic(ctx, concurrency, startTime, endTime)
 }
 
-func (w *Server) queryTimeSeries(ctx echo.Context, start, end string) error {
+func (w *Server) queryTimeSeries(ctx echo.Context, start, end time.Time) error {
 	//preparing sql statement before arguments are populated
-	stmt, err := w.Db.Prepare("select *  from sre.timeseries where  ?<=ts and ts<=?")
+	stmt, err := w.Db.Prepare("select *  from sre.timeseriesv2 where  ?<=ts and ts<=? order by ts")
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, models.Message{Error: fmt.Errorf("could not prepare statement: %w", err).Error()})
 	}
 	defer stmt.Close()
 	// querying sql statement by supplying arguments
+
 	rows, err := stmt.Query(start, end)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, models.Message{Error: fmt.Errorf("could not query statement: %w", err).Error()})
@@ -89,18 +116,24 @@ func (w *Server) queryTimeSeries(ctx echo.Context, start, end string) error {
 	// populating  array struct by iterating each row
 	var all []models.Timeseries
 	for rows.Next() {
-		var t models.Timeseries
-		if err := rows.Scan(&t.Timestamp, &t.Cpu, &t.Concurrency); err != nil {
-			return ctx.JSON(http.StatusInternalServerError, fmt.Errorf("could not scan row: %w", err))
+		var (
+			ts          sql.NullTime
+			cpu         sql.NullFloat64
+			concurrency sql.NullInt32
+		)
+		if err := rows.Scan(&ts, &cpu, &concurrency); err != nil {
+			return ctx.JSON(http.StatusInternalServerError, models.Message{Error: fmt.Errorf("could not scan row: %w", err).Error()})
 		}
-		all = append(all, t)
+		timeseries := models.Timeseries{
+			Timestamp: ts.Time, Cpu: float32(cpu.Float64), Concurrency: uint32(concurrency.Int32)}
+		all = append(all, timeseries)
 	}
 
 	return ctx.JSON(http.StatusOK, all)
 }
-func (w *Server) queryStatistic(ctx echo.Context, variable, start, end string) error {
+func (w *Server) queryStatistic(ctx echo.Context, variable string, start, end time.Time) error {
 	//preparing sql statement before arguments are populated
-	stmt, err := w.Db.Prepare(fmt.Sprintf(`select AVG(%s), MAX(%s), MIN(%s) from sre.timeseries where  ?<=ts and ts<=?`, variable, variable, variable))
+	stmt, err := w.Db.Prepare(fmt.Sprintf(`select AVG(%s), MAX(%s), MIN(%s) from sre.timeseriesv2 where  ?<=ts and ts<=?`, variable, variable, variable))
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, models.Message{Error: fmt.Errorf("could not prepare statement: %w", err).Error()})
 	}

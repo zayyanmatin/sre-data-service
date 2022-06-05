@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type Statistic struct {
 	Avg float64 `json:"avg"`
 	Max float64 `json:"max"`
@@ -7,9 +9,9 @@ type Statistic struct {
 }
 
 type Timeseries struct {
-	Timestamp   uint32  `json:"ts"`
-	Cpu         float32 `json:"cpu"`
-	Concurrency uint32  `json:"concurrency"`
+	Timestamp   time.Time `json:"ts"`
+	Cpu         float32   `json:"cpu"`
+	Concurrency uint32    `json:"concurrency"`
 }
 
 type Message struct {

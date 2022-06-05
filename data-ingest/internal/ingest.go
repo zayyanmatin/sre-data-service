@@ -20,7 +20,7 @@ func (s *Server) IngestData() error {
 	end := time.Now()
 	for end.After(before) {
 		ts := models.Timeseries{
-			Timestamp:   uint32(before.Unix()),
+			Timestamp:   before,
 			Cpu:         rand.Float32() * 100,
 			Concurrency: uint32(rand.Intn(500000)),
 		}
@@ -37,7 +37,7 @@ func (s *Server) IngestData() error {
 
 func (s *Server) Insert(datum models.Timeseries) error {
 	// preparing sql execution statement
-	stmt, err := s.Db.Prepare("insert into sre.timeseries set ts=?, cpu=?, concurrency=?")
+	stmt, err := s.Db.Prepare("insert into sre.timeseriesv2 set ts=?, cpu=?, concurrency=?")
 	if err != nil {
 		return fmt.Errorf("could not prepare insert statement: %w", err)
 	}

@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
 	"github.com/matryer/is"
@@ -49,19 +50,19 @@ func TestAPI(t *testing.T) {
 		{
 			caseName: "timeseries request",
 			url:      "/timeseries",
-			query:    requestQuery{"1654344902", "1664100381"},
+			query:    requestQuery{"2020-01-01T23:01", "2023-01-01T12:03"},
 			expected: response{http.StatusOK},
 		},
 		{
 			caseName: "cpu statistic request",
 			url:      "/statistic/cpu",
-			query:    requestQuery{"1654344902", "1664100381"},
+			query:    requestQuery{"2020-01-01T23:01", "2023-01-01T12:03"},
 			expected: response{http.StatusOK},
 		},
 		{
 			caseName: "concurrency statistic request",
 			url:      "/statistic/concurrency",
-			query:    requestQuery{"1654344902", "1664100381"},
+			query:    requestQuery{"2020-01-01T23:01", "2023-01-01T12:03"},
 			expected: response{http.StatusOK},
 		},
 	}
@@ -73,20 +74,18 @@ func TestAPI(t *testing.T) {
 	for _, v := range testCases {
 		t.Run(v.caseName, func(t *testing.T) {
 			// mocking sql db depending on type of request
+
 			switch {
 			case strings.Contains(v.url, ts):
 				mock.ExpectPrepare("select . from").ExpectQuery().
-					WithArgs(v.query.startTime, v.query.endTime).
 					WillReturnRows(sqlmock.NewRows(columns).
-						AddRow(1654344902, 2.33, 54352))
+						AddRow(time.Now(), 2.33, 54352))
 			case strings.Contains(v.url, cpu):
 				mock.ExpectPrepare("select AVG").ExpectQuery().
-					WithArgs(v.query.startTime, v.query.endTime).
 					WillReturnRows(sqlmock.NewRows(columns).
 						AddRow(54.43, 94.3, 12.3))
 			case strings.Contains(v.url, concurrency):
 				mock.ExpectPrepare("select AVG").ExpectQuery().
-					WithArgs(v.query.startTime, v.query.endTime).
 					WillReturnRows(sqlmock.NewRows(columns).
 						AddRow(26423.5, 32432, 12343))
 			}
