@@ -20,7 +20,7 @@ API specification is available within the repository
 From repository's root directory run go test ./... -v
 
 ## Enhancements to be made
-Add validation on startTime and endTime with 400 bad requests 
+validate that query parameters startTime is before endTime with 400 bad requests 
 
 Add logging to both ingestion and api 
 
