@@ -30,7 +30,7 @@ func (s *Server) IngestData() error {
 			return fmt.Errorf("could not insert datum: %w", err)
 		}
 		// incrementing to next instance of timeseries
-		before = before.Add(60 * time.Second)
+		before = before.Add(time.Minute)
 	}
 	return nil
 }
