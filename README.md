@@ -17,7 +17,7 @@ To start the API server, run main.go from api/cmd. API will be available on port
 API specification is available within the repository
 
 ## Running Unit Tests
-From root directory run go test ./... -v
+From repository's root directory run go test ./... -v
 
 ## Enhancements to be made
 Add validation on startTime and endTime with 400 bad requests 
