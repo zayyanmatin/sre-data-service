@@ -1,4 +1,4 @@
-# SRE Data Services
+# SRE Data Service
 A Service run in Go that will ingest mock cpu and concurrency data into mysql.
 A REST Api is provided to query the data.
 
