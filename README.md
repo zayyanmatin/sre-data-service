@@ -20,6 +20,9 @@ API specification is available within the repository
 From repository's root directory run go test ./... -v
 
 ## Enhancements to be made
+
+Add script to start sql server and securely pass DSN before running main.go file
+
 validate that query parameters startTime is before endTime with 400 bad requests 
 
 Add logging to both ingestion and api 
@@ -27,7 +30,6 @@ Add logging to both ingestion and api
 Make updates and corrections to API spec
 
 ## Tech debt
-Add script to start sql server and securely pass DSN before running main.go file
 
 Update API Unit test to check response body
 
