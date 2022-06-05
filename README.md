@@ -31,6 +31,8 @@ Make updates and corrections to API spec
 ## Tech debt
 Add script to start sql server before running main.go file
 
+Update API Unit test to check response body
+
 Add optional flag to clean up and drop database
 
 Add configs file to manage environment variables properly
