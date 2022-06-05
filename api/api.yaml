@@ -17,6 +17,7 @@ paths:
     get:
       tags:
       - "timeseries"
+      summary: "retrieve cpu and concurrency timeseries in requested period"
       produces:
       - "application/json"
       parameters:
@@ -32,18 +33,16 @@ paths:
         "200":
           description: "successful operation"
           schema:
-            type: "string"
-        "400":
-          description: "Invalid request"
+            $ref: '#/definitions/Timeseries'
+        "500":
+          description: "Internal Server Error"
           schema:
-            type: "string"
+            $ref: '#/definitions/Message'
   /statistic/cpu:
     get:
       tags:
       - "statistic"
-      summary: "Logs out current logged in user session"
-      description: ""
-      operationId: "logoutUser"
+      summary: "retrieve cpu statistics in requested period"
       produces:
       - "application/json"
       parameters:
@@ -59,16 +58,16 @@ paths:
         "200":
           description: "successful operation"
           schema:
-            type: "string"
-        "400":
-          description: "Invalid request"
+            $ref: '#/definitions/Statistic'
+        "500":
+          description: "Internal Server Error"
           schema:
-            type: "string"
+            $ref: '#/definitions/Message'
   /statistic/concurrency:
     get:
       tags:
       - "statistic"
-      summary: "Logs out current logged in user session"
+      summary: "retrieve concurrency statistics in requested period"
       produces:
       - "application/json"
       parameters:
@@ -84,9 +83,29 @@ paths:
         "200":
           description: "successful operation"
           schema:
-            type: "string"
-        "400":
-          description: "Invalid request"
+            $ref: '#/definitions/Statistic'
+        "500":
+          description: "Internal Server Error"
           schema:
-            type: "string"
-  
+            $ref: '#/definitions/Message'
+definitions:
+  Timeseries:
+    properties:
+      timestamp:
+        type: integer
+      cpu:
+        type: number
+      concurrency:
+        type: integer 
+  Statistic:
+    properties:
+      avg:
+        type: number
+      max:
+        type: number
+      min:
+        type: number
+  Message:
+    properties:
+      error:
+        type: string
