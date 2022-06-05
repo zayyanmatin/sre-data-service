@@ -31,9 +31,7 @@ func Setup(db *sql.DB) (*Server, error) {
 
 	// Routes
 	e.GET("/timeseries", server.getTimeseries)
-	e.GET("/statistic/cpu", server.getCpu)
-	e.GET("/statistic/concurrency", server.getConcurrency)
-
+	e.GET("/statistic/:resource", server.getStatistic)
 	server.Api = e
 	server.Db = db
 
@@ -69,7 +67,7 @@ func (w *Server) getTimeseries(ctx echo.Context) error {
 	return w.queryTimeSeries(ctx, startTime, endTime)
 }
 
-func (w *Server) getCpu(ctx echo.Context) error {
+func (w *Server) getStatistic(ctx echo.Context) error {
 	//retrieving query parameters
 	startString := ctx.QueryParam("startTime")
 	endString := ctx.QueryParam("endTime")
@@ -81,22 +79,11 @@ func (w *Server) getCpu(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, models.Message{Error: fmt.Errorf("could not parse end time: %w", err).Error()})
 	}
-	return w.queryStatistic(ctx, cpu, startTime, endTime)
-}
-
-func (w *Server) getConcurrency(ctx echo.Context) error {
-	//retrieving query parameters
-	startString := ctx.QueryParam("startTime")
-	endString := ctx.QueryParam("endTime")
-	startTime, err := time.Parse(dateFormat, startString)
-	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, models.Message{Error: fmt.Errorf("could not parse start time: %w", err).Error()})
+	resource := ctx.Param("resource")
+	if resource == cpu || resource == concurrency {
+		return w.queryStatistic(ctx, resource, startTime, endTime)
 	}
-	endTime, err := time.Parse(dateFormat, endString)
-	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, models.Message{Error: fmt.Errorf("could not parse end time: %w", err).Error()})
-	}
-	return w.queryStatistic(ctx, concurrency, startTime, endTime)
+	return ctx.JSON(http.StatusNotFound, models.Message{Error: "resource not found"})
 }
 
 func (w *Server) queryTimeSeries(ctx echo.Context, start, end time.Time) error {
