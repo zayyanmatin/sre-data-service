@@ -15,13 +15,20 @@ func init() {
 }
 
 func main() {
-	//fetching db
+	// fetching db
 	db := sqlserver.FetchDb()
+	// closing db resource before exit
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Fatal("unable to close db", err)
+		}
+	}()
+	// create server instance with db
 	server := internal.Server{
 		Db: db,
 	}
-	//starting ingestion
+	// starting ingestion
 	if err := server.IngestData(); err != nil {
-		log.Fatal(err)
+		log.Fatal("error in ingesting data", err)
 	}
 }

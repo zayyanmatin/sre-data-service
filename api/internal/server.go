@@ -21,7 +21,7 @@ const (
 	concurrency = "concurrency"
 )
 
-func Start(db *sql.DB) (*Server, error) {
+func Setup(db *sql.DB) (*Server, error) {
 	var server Server
 
 	// creating echo instance

@@ -40,7 +40,7 @@ func TestAPI(t *testing.T) {
 	defer db.Close()
 
 	// starting up our api and connection to mock db
-	server, err := Start(db)
+	server, err := Setup(db)
 	if err != nil {
 		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 	}
