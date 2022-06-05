@@ -26,8 +26,6 @@ Add logging to both ingestion and api
 
 Convert startTime and endTime  into time variables
 
-Make updates and corrections to API spec
-
 ## Tech debt
 Add script to start sql server before running main.go file
 
